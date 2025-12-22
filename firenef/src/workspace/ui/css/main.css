@@ -1,0 +1,16 @@
+:host {
+    color: white;
+}
+
+#fpsCounter {
+    width: fit-content;
+    font-family: monospace;
+    font-size: 20px;
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 0 0 15px 0;
+    user-select: none;
+    pointer-events: none;
+    z-index: 1;
+}

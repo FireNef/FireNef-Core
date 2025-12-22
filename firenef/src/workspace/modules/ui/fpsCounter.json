@@ -1,0 +1,20 @@
+{
+    "type": "component",
+    "class": "UiElement",
+    "name": "FPS Counter",
+    "attributes": [
+        [
+            {
+                "comment": "Html File Path",
+                "value": "./src/workspace/ui/html/fpsCounter.html",
+                "type": "file"
+            }
+        ]
+    ],
+    "children": [
+        {
+            "type": "component",
+            "class": "FPSCounterScript"
+        }
+    ]
+}

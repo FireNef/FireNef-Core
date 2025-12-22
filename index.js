@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const projectName = "firenef";
+
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
@@ -12,15 +14,18 @@ const createWindow = () => {
         minWidth: 320,
         minHeight: 240,
         autoHideMenuBar: true,
-        icon: path.join(__dirname, "assets", "icon.ico")
+        icon: path.join(__dirname, projectName, "assets", "icon.ico"),
+        webPreferences: {
+            nodeIntegration: true,
+            webgpu: true
+        }
     });
 
-    win.loadFile('index.html');
+    win.loadFile(path.join(__dirname, projectName, "index.html"));
 }
 
-app.commandLine.appendSwitch("use-angle", "d3d11");
-app.commandLine.appendSwitch("use-gl", "desktop");
 app.commandLine.appendSwitch("ignore-gpu-blocklist");
+app.commandLine.appendSwitch("enable-unsafe-webgpu");
 
 app.whenReady().then(() => {
     createWindow();
