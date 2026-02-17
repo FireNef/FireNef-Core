@@ -15,6 +15,23 @@ export class Component {
         this._hidden = false;
 
         this.attributes = [];
+        this.attributeDisableValue = 0;
+    }
+
+    static icon = ["component"];
+    static group = "General";
+    
+    static #HIDE = Symbol("hideInGroup");
+
+    static get hideInGroup() {
+        if (this === Component) return true;
+        return Object.hasOwn(this, Component.#HIDE)
+            ? this[Component.#HIDE]
+            : false;
+    }
+
+    static set hideInGroup(value) {
+        this[Component.#HIDE] = Boolean(value);
     }
 
     appendChild(child) {
@@ -78,6 +95,22 @@ export class Component {
 
     async setAttributeFieldValue(attribute = 0, field = 0, value, type) {
         return await this.attributes[attribute].fields[field].setValue(value, type);
+    }
+
+    setNonAsyncAttributeFieldValue(attribute = 0, field = 0, value, type, disableComponent = false) {
+        if (disableComponent) {
+            this.enable = false;
+            this.attributeDisableValue++;
+        };
+        this.attributes[attribute].fields[field].setValue(value, type).then(() => {
+            if (disableComponent) {
+                this.attributeDisableValue--;
+                if (this.attributeDisableValue <= 0) {
+                    this.attributeDisableValue = 0;
+                    this.enable = true;
+                }
+            };
+        });
     }
 
     get highestParent() {

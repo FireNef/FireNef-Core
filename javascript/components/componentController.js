@@ -1,11 +1,13 @@
 import { Component } from "./component.js";
 
 export class ComponentController extends Component {
-    constructor(name = "componentController") {
+    constructor(name = "Component Controller") {
         super(name);
 
         this.updateDepthLimit = 100000;
     }
+
+    static icon = ["componentController", ...super.icon];
 
     update() {
         if (!this.enable) return;
@@ -26,12 +28,12 @@ export class ComponentController extends Component {
     runChild(child) {
         if (child.start && typeof child.start === "function") {
             if (!child.started) {
-                child.start();
+                try { child.start(); } catch (e) { console.error(e); }
                 child.started = true;
             }
         }
         if (child.update && typeof child.update === "function") {
-            child.update();
+            try { child.update(); } catch (e) { console.error(e); }
         }
     }
 }

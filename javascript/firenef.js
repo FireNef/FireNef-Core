@@ -1,3 +1,5 @@
+import setupEngine from "../loader/setup.js";
+
 import { Engine } from "./mainEngine.js";
 import { Component } from "./components/component.js";
 import { ComponentController } from "./components/componentController.js";
@@ -36,6 +38,8 @@ import { NormalMaterialComponent } from "./components/3d/materials/normalMateria
 import { DepthMaterialComponent } from "./components/3d/materials/depthMaterial.js";
 
 export {
+    setupEngine,
+
     Engine, Component, ComponentController, Script, Attribute, Field,
 
     StorageComponent, GroupComponent,
@@ -49,5 +53,5 @@ export {
     CylinderMeshComponent, TorusMeshComponent, RingMeshComponent, CapsuleMeshComponent, CircleMeshComponent,
 
     StandardMaterialComponent, PhysicalMaterialComponent, PhongMaterialComponent, ToonMaterialComponent,
-    BasicMaterialComponent, LambertMaterialComponent, MapcapMaterialComponent, NormalMaterialComponent, DepthMaterialComponent
+    BasicMaterialComponent, LambertMaterialComponent, MapcapMaterialComponent, NormalMaterialComponent, DepthMaterialComponent,
 }; 
