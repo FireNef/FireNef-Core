@@ -1,6 +1,6 @@
 import { Component } from "../../component.js";
 import { Attribute } from "../../attributes.js";
-import * as THREE from "#three";
+import * as THREE from "three";
 
 export class DepthMaterialComponent extends Component {
     constructor(name = "Depth Material") {

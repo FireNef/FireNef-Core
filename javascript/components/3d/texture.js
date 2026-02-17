@@ -1,6 +1,6 @@
 import { Component } from "../component.js";
 import { Attribute } from "../attributes.js";
-import * as THREE from "#three";
+import * as THREE from "three";
 
 export class TextureComponent extends Component {
     static loader = new THREE.TextureLoader();

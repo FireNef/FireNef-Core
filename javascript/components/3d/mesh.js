@@ -1,4 +1,4 @@
-import * as THREE from "#three";
+import * as THREE from "three";
 import { Object3d } from "./object3d.js";
 import { Attribute } from "../attributes.js";
 import { TextureComponent } from "./texture.js";
