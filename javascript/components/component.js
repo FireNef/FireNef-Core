@@ -52,8 +52,8 @@ export class Component {
         if (child.parentRemoved && typeof child.parentRemoved === "function") child.parentRemoved();
 
         this.children.splice(index, 1);
-        this.childRemoved(child);
         child.parent = null;
+        this.childRemoved(child);
     }
 
     removeParent() {
