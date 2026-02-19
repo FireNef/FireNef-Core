@@ -1,4 +1,5 @@
 import { StandardMaterialComponent } from "./standardMaterial.js";
+import { Attribute } from "../../attributes.js";
 import * as THREE from "three";
 
 export class PhongMaterialComponent extends StandardMaterialComponent {
