@@ -43,6 +43,7 @@ export class Component {
         child.parent = this;
 
         if (child.parentAdded && typeof child.parentAdded === "function") child.parentAdded();
+        this.childAdded(child);
     }
 
     removeChild(child) {
@@ -51,6 +52,7 @@ export class Component {
         if (child.parentRemoved && typeof child.parentRemoved === "function") child.parentRemoved();
 
         this.children.splice(index, 1);
+        this.childRemoved(child);
         child.parent = null;
     }
 
@@ -60,6 +62,7 @@ export class Component {
                 this.parent.removeChild(this);
             } else {
                 this.parentRemoved();
+                if (this.parent.childRemoved && typeof this.parent.childRemoved === "function") this.parent.childRemoved(this);
                 this.parent = null;
             }
         }
@@ -74,6 +77,14 @@ export class Component {
     }
 
     parentAdded() {
+
+    }
+
+    childRemoved(child) {
+
+    }
+
+    childAdded(child) {
 
     }
 
