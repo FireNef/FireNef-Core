@@ -1,8 +1,7 @@
 import { EngineLogger } from "./components/engineLogger.js";
 
 export class Engine {
-    constructor(root) {
-        this.root = root;
+    constructor() {
         this.running = false;
         
         this.logger = new EngineLogger();
