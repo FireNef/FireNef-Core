@@ -46,6 +46,10 @@ export class UiController extends Component {
 
     start() {
         this.viewport = this.getFirstParentOfType(Viewport);
+        if (!this.viewport) {
+            this.enable = false;
+            return;
+        }
 
         this.host = document.createElement('div');
         this.shadow = this.host.attachShadow({ mode: "open" });
