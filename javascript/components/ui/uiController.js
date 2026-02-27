@@ -1,5 +1,6 @@
 import { Component } from "../component.js";
-import { Attribute, Field } from "../attributes.js";
+import { Attribute } from "../attributes.js";
+import { Viewport } from "../viewport.js";
 
 export class UiController extends Component {
     constructor (name = "UI Controller") {
@@ -16,8 +17,7 @@ export class UiController extends Component {
         this.element.name = name;
         this.element.style.transformOrigin = "top left";
 
-        this.engine = null;
-        this.root = null;
+        this.viewport = null;
 
         this.host = null;
         this.shadow = null;
@@ -45,9 +45,7 @@ export class UiController extends Component {
     }
 
     start() {
-        this.engine = this.highestParent;
-
-        this.root = this.engine.root;
+        this.viewport = this.getFirstParentOfType(Viewport);
 
         this.host = document.createElement('div');
         this.shadow = this.host.attachShadow({ mode: "open" });
@@ -58,7 +56,7 @@ export class UiController extends Component {
         this.shadow.adoptedStyleSheets = [this.style];
         this.shadow.append(this.element);
 
-        this.root.appendChild(this.host);
+        this.viewport.viewportElement.appendChild(this.host);
 
         window.addEventListener('resize', () => {
             this.resize();
