@@ -1,6 +1,8 @@
 import setupEngine from "../loader/setup.js";
 
 import { Engine } from "./mainEngine.js";
+import { Viewport } from "./components/viewport.js";
+import { Renderer3D } from "./components/renderer3D.js";
 import { Component } from "./components/component.js";
 import { ComponentController } from "./components/componentController.js";
 import { Script } from "./components/script.js";
@@ -42,7 +44,7 @@ import { DepthMaterialComponent } from "./components/3d/materials/depthMaterial.
 export {
     setupEngine,
 
-    Engine, Component, ComponentController, Script, Attribute, Field,
+    Engine, Viewport, Renderer3D, Component, ComponentController, Script, Attribute, Field,
 
     StorageComponent, GroupComponent,
     UiController, UiElement, SvgElement,

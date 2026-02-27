@@ -72,19 +72,21 @@ export class UiController extends Component {
     parentAdded() {
         if (!this.host) return;
 
-        this.engine = this.highestParent;
+        this.viewport = this.getFirstParentOfType(Viewport);
+        if (!this.viewport) {
+            this.enable = false;
+            return;
+        }
 
-        this.root = this.engine.root;
-
-        this.root.appendChild(this.host);
+        this.viewport.viewportElement.appendChild(this.host);
     }
 
     visiblityChanged() {
         if (this._visible) {
             if (!this.host || this.host.isConnected) return;
-            this.engine = this.highestParent;
-            this.root = this.engine.root;
-            this.root.appendChild(this.host);
+
+            this.viewportElement = this.viewport.viewportElement;
+            this.viewportElement.appendChild(this.host);
         } else {
             if (this.host && this.host.isConnected) this.host.remove();
         }
@@ -97,7 +99,7 @@ export class UiController extends Component {
             return;
         }
         
-        this.resolution = this.engine.renderer.resolution;
+        this.resolution = this.viewport.actualResolution;
 
         if (!this.getAttributeFieldValue(0, 2)) {
             this.element.style.width = "100%";

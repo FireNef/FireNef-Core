@@ -1,6 +1,7 @@
 import { Component } from "../component.js";
 import { Attribute } from "../attributes.js";
 import { SceneComponent } from "./scene.js";
+import { Renderer3D } from "../renderer3D.js";
 
 export class SceneController extends Component {
     constructor(name = "Scene Controller") {
@@ -16,7 +17,8 @@ export class SceneController extends Component {
     static group = "General 3D";
 
     start() {
-        this.renderer = this.highestParent.renderer;
+        this.renderer = this.getFirstParentOfType(Renderer3D);
+        if (!this.renderer) this.enable = false;
     }
 
     update() {

@@ -9,6 +9,8 @@ export class MeshComponent extends Object3d {
         const meshAttribute = new Attribute("Mesh");
         meshAttribute.addField("Geometry", "three", null);
         meshAttribute.addField("Material", "three", null);
+        meshAttribute.addField("Cast Shadows", "boolean", true);
+        meshAttribute.addField("Receive Shadows", "boolean", true);
         this.attributes.push(meshAttribute);
 
         this.object3D = new THREE.Mesh();
@@ -26,5 +28,7 @@ export class MeshComponent extends Object3d {
         const materialComponent = this.getAttributeFieldValue(1, 1);
         this.object3D.geometry = geometry;
         this.object3D.material = materialComponent?.material ?? null;
+        this.object3D.castShadow = this.getAttributeFieldValue(1, 2);
+        this.object3D.receiveShadow = this.getAttributeFieldValue(1, 3);
     }
 }

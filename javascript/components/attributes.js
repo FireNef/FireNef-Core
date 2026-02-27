@@ -20,6 +20,14 @@ export class Field {
         }
         this.value = value;
     }
+
+    deepClone() {
+        const cloned = new Field(this.name, this.type);
+        cloned.value = structuredClone(this.value);
+        cloned.rawValue = structuredClone(this.rawValue);
+        cloned.setType = this.setType;
+        return cloned;
+    }
 }
 
 export class Attribute {
@@ -36,6 +44,13 @@ export class Attribute {
             if (type) field.setType = type;
         }
         this.fields.push(field);
+    }
+
+    deepClone() {
+        const cloned = new Attribute(this.name);
+        cloned.enable = this.enable;
+        cloned.fields = this.fields.map(f => f.deepClone());
+        return cloned;
     }
 }
 

@@ -30,7 +30,8 @@ export class UiElement extends Component {
         this.updateElement();
     }
 
-    removeElement(element) { 
+    removeElement(element) {
+        if (!this.host.contains(element)) return;
         this.host.removeChild(element);
         this.updateElement();
     }

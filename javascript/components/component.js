@@ -21,6 +21,8 @@ export class Component {
     static icon = ["component"];
     static group = "General";
     
+    static baseType = "component";
+
     static #HIDE = Symbol("hideInGroup");
 
     static get hideInGroup() {
@@ -96,8 +98,69 @@ export class Component {
         return this.children.length !== 0;
     }
 
+    /*
+    get child() {
+        const grouped = {};
+
+        for (const instance of this.children) {
+            const key = instance.constructor.name;
+
+            if (!grouped[key]) {
+                grouped[key] = [];
+            }
+
+            grouped[key].push(instance);
+        }
+
+        const result = {};
+
+        for (const key in grouped) {
+            result[key] = new Proxy(grouped[key], {
+                set() {
+                    throw new Error(`${key} children are read-only`);
+                },
+                get(target, prop) {
+                    const blocked = [
+                        "push",
+                        "pop",
+                        "shift",
+                        "unshift",
+                        "splice",
+                        "sort",
+                        "reverse"
+                    ];
+
+                    if (blocked.includes(prop)) {
+                        return () => {
+                            throw new Error(`${key} children are read-only`);
+                        };
+                    }
+
+                    return target[prop];
+                }
+            });
+        }
+
+        return Object.freeze(result);
+    }
+    */
+
     getChildrenRunOrder() {
         return this.children;
+    }
+
+    deepClone() {
+        const cloned = new this.constructor(this.name);
+
+        cloned.attributes = this.attributes.map(attr => attr.deepClone());
+
+        for (const child of this.children) {
+            const childClone = child.deepClone();
+            childClone.parent = cloned;
+            cloned.children.push(childClone);
+        }
+
+        return cloned;
     }
 
     getAttributeFieldValue(attribute = 0, field = 0) {
@@ -126,6 +189,12 @@ export class Component {
 
     get highestParent() {
         return this.parent ? (this.parent?.highestParent ?? this.parent) : this;
+    }
+
+    getViewportCapableComponent() {
+        if (!this.parent) return;
+        if (!this.parent.getViewportCapableComponent) return;
+        return this.parent.getViewportCapableComponent();
     }
 
     getFirstParentOfType(type) {
