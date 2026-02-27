@@ -15,6 +15,8 @@ export class Viewport extends Component {
         this.actualResolution = { width: 1920, height: 1080 };
         this.oldResolution = this.actualResolution;
 
+        this.startAmount = 0;
+
         this.resolutionUpdateList = [];
 
         this.viewportElement = document.createElement('div');
@@ -33,6 +35,13 @@ export class Viewport extends Component {
 
         this.viewportResize();
         this.viewportElement.addEventListener("resize", () => this.viewportResize());
+    }
+
+    update() {
+        if (this.startAmount < 2) {
+            this.viewportResize();
+            this.startAmount++;
+        }
     }
 
     async setAttributeFieldValue(attribute = 0, field = 0, value, type) {

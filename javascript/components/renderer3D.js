@@ -98,8 +98,8 @@ export class Renderer3D extends Component {
             this.renderer.outputEncoding = this.getAttributeFieldValue(1, 0);
             this.renderer.toneMapping = this.getAttributeFieldValue(1, 1);
             this.renderer.toneMappingExposure = this.getAttributeFieldValue(1, 2);
-            this.renderer.shadowMap.enabled = this.getAttributeFieldValue(1, 4);
-            this.renderer.shadowMap.type = this.getAttributeFieldValue(1, 5);
+            this.renderer.shadowMap.enabled = this.getAttributeFieldValue(1, 3);
+            this.renderer.shadowMap.type = this.getAttributeFieldValue(1, 4);
 
             await this.renderer.init();
             this.renderer.setSize(this.resolution.width, this.resolution.height, false);
@@ -185,12 +185,14 @@ export class Renderer3D extends Component {
     setScene(scene) {
         // return;
         this.sceneComponent = scene;
+        if (!this.sceneComponent) return
         this.scene = scene?.threeObject;
     }
 
     setCamera(camera) {
         // return;
         this.cameraComponent = camera;
+        if (!this.cameraComponent) return
         this.camera = camera?.threeObject;
         this.camera.aspect = this.aspectRatio;
         this.camera.updateProjectionMatrix();
