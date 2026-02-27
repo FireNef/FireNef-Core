@@ -22,6 +22,7 @@ export class SceneController extends Component {
     }
 
     update() {
+        if (!this.renderer) return;
         const index = this.getAttributeFieldValue(0, 0);
         const scene = this.children[index];
 
