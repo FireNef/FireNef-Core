@@ -11,9 +11,11 @@ export class Viewport extends Component {
         viewportAttribute.addField("Resolution Height", "number", 1080);
         this.attributes.push(viewportAttribute);
 
-        this.aspecRatio = 16 / 9;
+        this.aspectRatio = 16 / 9;
+
         this.actualResolution = { width: 1920, height: 1080 };
-        this.oldResolution = this.actualResolution;
+        this.actualAspectRatio = this.actualResolution.width / this.actualResolution.height;
+        this.oldResolution = { width: 1920, height: 1080 };
 
         this.startAmount = 0;
 
@@ -34,7 +36,14 @@ export class Viewport extends Component {
         this.getViewportCapableComponent().appendChild(this.viewportElement);
 
         this.viewportResize();
-        this.viewportElement.addEventListener("resize", () => this.viewportResize());
+
+        const observer = new ResizeObserver(entries => {
+            for (const entry of entries) {
+                this.viewportResize();
+            }
+        });
+
+        observer.observe(this.viewportElement);
     }
 
     update() {
@@ -50,8 +59,10 @@ export class Viewport extends Component {
     }
 
     viewportResize() {
+        this.aspectRatio = this.getAttributeFieldValue(0, 1) / this.getAttributeFieldValue(0, 2);
+
         if (this.getAttributeFieldValue(0, 0)) {
-            this.positionElementsAspectRatio(this.viewportElement, this.aspecRatio);
+            this.positionElementsAspectRatio(this.viewportElement, this.aspectRatio);
         } else {
             this.positionElementsFreeForm(this.viewportElement);
         }
@@ -70,15 +81,15 @@ export class Viewport extends Component {
 
         const windowRatio = vw / vh;
 
-        if (windowRatio > this.aspecRatio) {
-            this.actualResolution.width = vh * this.aspecRatio;
-            this.actualResolution.height = vh;
+        if (windowRatio > this.aspectRatio) {
+            this.actualResolution.width = this.getAttributeFieldValue(0, 1);
+            this.actualResolution.height = this.getAttributeFieldValue(0, 1) / windowRatio;
         } else {
-            this.actualResolution.width = vw;
-            this.actualResolution.height = vw / this.aspecRatio;
+            this.actualResolution.width = this.getAttributeFieldValue(0, 2) * windowRatio;
+            this.actualResolution.height = this.getAttributeFieldValue(0, 2);
         }
 
-        this.aspecRatio = this.actualResolution.width / this.actualResolution.height;
+        this.actualAspectRatio = this.actualResolution.width / this.actualResolution.height;
 
         for (const element of container.children) {
             element.style.position = "absolute";
@@ -96,7 +107,7 @@ export class Viewport extends Component {
         this.actualResolution.width = this.getAttributeFieldValue(0, 1);
         this.actualResolution.height = this.getAttributeFieldValue(0, 2);
 
-        this.aspecRatio = this.actualResolution.width / this.actualResolution.height;
+        this.actualAspectRatio = this.actualResolution.width / this.actualResolution.height;
 
         let width = vw;
         let height = width * (1 / aspecRatio);
