@@ -37,10 +37,10 @@ export class Viewport extends Component {
 
         this.viewportResize();
 
+        window.addEventListener('resize', () => this.viewportResize());
+
         const observer = new ResizeObserver(entries => {
-            for (const entry of entries) {
-                this.viewportResize();
-            }
+            this.viewportResize();
         });
 
         observer.observe(this.viewportElement);
