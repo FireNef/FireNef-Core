@@ -56,6 +56,9 @@ export class Renderer3D extends Component {
         this.aspectRatio = 16 / 9;
     }
 
+    static baseType = "renderer3D"
+    static type = "renderer3D"
+
     updateResolution() {
         this.resolution.width = this.viewport.actualResolution.width;
         this.resolution.height = this.viewport.actualResolution.height;

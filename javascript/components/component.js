@@ -22,6 +22,7 @@ export class Component {
     static group = "General";
     
     static baseType = "component";
+    static type = "component";
 
     static #HIDE = Symbol("hideInGroup");
 
@@ -98,12 +99,13 @@ export class Component {
         return this.children.length !== 0;
     }
 
-    /*
     get child() {
         const grouped = {};
 
         for (const instance of this.children) {
-            const key = instance.constructor.name;
+            const key = instance.constructor.baseType ?? instance.constructor.type;
+
+            if (!key) continue;
 
             if (!grouped[key]) {
                 grouped[key] = [];
@@ -143,7 +145,6 @@ export class Component {
 
         return Object.freeze(result);
     }
-    */
 
     getChildrenRunOrder() {
         return this.children;

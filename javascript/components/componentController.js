@@ -9,6 +9,9 @@ export class ComponentController extends Component {
 
     static icon = ["componentController", ...super.icon];
 
+    static baseType = "componentController"
+    static type = "componentController"
+
     update() {
         if (!this.enable) return;
         this.runChildrenCluster(this.children);

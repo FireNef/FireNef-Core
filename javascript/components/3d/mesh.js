@@ -22,6 +22,9 @@ export class MeshComponent extends Object3d {
         this.hideInGroup = true;
     }
 
+    static baseType = "mesh"
+    static type = "mesh"
+
     update() {
         super.update(); // Update transform if allowed
         const geometry = this.getAttributeFieldValue(1, 0);

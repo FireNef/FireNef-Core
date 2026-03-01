@@ -97,6 +97,9 @@ export class StandardMaterialComponent extends Component {
 
     static group = "3D Materials";
 
+    static baseType = "material"
+    static type = "standardMaterial"
+
     updateCoreMaterialProperties(attribute = 0) {
         this.material.visible = this.getAttributeFieldValue(attribute, 0);
         this.material.color = new THREE.Color(this.getAttributeFieldValue(attribute, 1));

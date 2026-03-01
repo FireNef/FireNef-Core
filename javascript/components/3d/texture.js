@@ -20,6 +20,9 @@ export class TextureComponent extends Component {
 
     static group = "General 3D";
 
+    static baseType = "texture"
+    static type = "texture"
+
     async setTexture(value, type) {
         if (type === "file") {
             const tex = await TextureComponent.loader.loadAsync(value);

@@ -33,6 +33,9 @@ export class SceneComponent extends Object3d {
         this.updateDepthLimit = 100000;
     }
 
+    static baseType = "scene";
+    static type = "scene";
+
     async updateEnvironment(renderer) {
         const texComp = this.getAttributeFieldValue(0, 1);
         if (!texComp || !texComp.texture) {

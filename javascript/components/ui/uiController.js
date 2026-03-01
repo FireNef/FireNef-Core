@@ -32,6 +32,9 @@ export class UiController extends Component {
     static icon = ["uiController", ...super.icon];
     static group = "UI Elements";
 
+    static baseType = "uiController";
+    static type = "uiController";
+
     appendElement(element) {
         this.element.appendChild(element);
     }

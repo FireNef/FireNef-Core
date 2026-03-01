@@ -15,6 +15,8 @@ export class PhongMaterialComponent extends StandardMaterialComponent {
         this.attributes[1] = surfaceAttribute;
     }
 
+    static type = "phongMaterial";
+
     updateSurfaceMaterialProperties(attribute = 1) {
         this.material.specular = new THREE.Color(this.getAttributeFieldValue(attribute, 0));
         this.material.shininess = this.getAttributeFieldValue(attribute, 1);

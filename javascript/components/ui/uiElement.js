@@ -25,6 +25,9 @@ export class UiElement extends Component {
     static icon = ["uiElement", ...super.icon];
     static group = "UI Elements";
 
+    static baseType = "uiElement";
+    static type = "uiElement";
+
     appendElement(element) {
         this.host.appendChild(element);
         this.updateElement();

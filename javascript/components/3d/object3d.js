@@ -44,6 +44,9 @@ export class Object3d extends Component {
         this.hideInGroup = true;
     }
 
+    static baseType = "object3d"
+    static type = "object3d"
+
     appendChild(child) {
         super.appendChild(child);
 

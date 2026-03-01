@@ -26,6 +26,9 @@ export class PerspectiveCameraComponent extends Object3d {
         this.renderer = null;
     }
 
+    static baseType = "camera"
+    static type = "camera"
+
     start() {
         this.renderer = this.getFirstParentOfType(Renderer3D);
     }

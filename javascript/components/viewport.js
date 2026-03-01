@@ -32,6 +32,9 @@ export class Viewport extends Component {
         this.viewportElement.style.overflow = "hidden";
     }
 
+    static baseType = "viewport"
+    static type = "viewport"
+
     start() {
         this.getViewportCapableComponent().appendChild(this.viewportElement);
 

@@ -13,6 +13,8 @@ export class ToonMaterialComponent extends StandardMaterialComponent {
         this.attributes[1] = surfaceAttribute;
     }
 
+    static type = "toonMaterial";
+
     updateSurfaceMaterialProperties(attribute = 1) {
         this.material.gradientMap = this.getAttributeFieldValue(attribute, 0);
         this.material.needsUpdate = true;

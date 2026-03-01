@@ -43,6 +43,8 @@ export class PhysicalMaterialComponent extends StandardMaterialComponent {
         this.attributes.push(iridescenceAttribute);
     }
 
+    static type = "pysicalMaterial";
+
     updateClearCoatMaterialProperties(attribute = 9) {
         this.material.clearcoat = this.getAttributeFieldValue(attribute, 0);
         this.material.clearcoatRoughness = this.getAttributeFieldValue(attribute, 1);

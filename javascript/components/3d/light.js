@@ -15,6 +15,9 @@ export class DirectionalLightComponent extends Object3d {
         this.object3D.name = name;
     }
 
+    static baseType = "directionalLight"
+    static type = "directionalLight"
+
     updateLightProperties() {
         const color = this.getAttributeFieldValue(1, 0);
         const intensity = this.getAttributeFieldValue(1, 1);
@@ -46,6 +49,9 @@ export class PointLightComponent extends Object3d {
         this.object3D = new THREE.PointLight(0xffffff, 1, 0, 2)
         this.object3D.name = name
     }
+
+    static baseType = "pointLight"
+    static type = "pointLight"
 
     updateLightProperties() {
         const color = this.getAttributeFieldValue(1, 0)
@@ -96,6 +102,9 @@ export class SpotLightComponent extends Object3d {
         this.object3D.add(this.target)
     }
 
+    static baseType = "spotLight"
+    static type = "spotLight"
+
     updateLightProperties() {
         const color = this.getAttributeFieldValue(1, 0)
         const intensity = this.getAttributeFieldValue(1, 1)
@@ -138,6 +147,9 @@ export class AmbientLightComponent extends Object3d {
         this.object3D.name = name
     }
 
+    static baseType = "ambientLight"
+    static type = "ambientLight"
+
     updateLightProperties() {
         const color = this.getAttributeFieldValue(1, 0)
         const intensity = this.getAttributeFieldValue(1, 1)
@@ -164,6 +176,9 @@ export class HemisphereLightComponent extends Object3d {
         this.object3D = new THREE.HemisphereLight(0x87ceeb, 0x444444, 0.6)
         this.object3D.name = name
     }
+
+    static baseType = "hemisphereLight"
+    static type = "hemisphereLight"
 
     updateLightProperties() {
         const skyColor = this.getAttributeFieldValue(1, 0)

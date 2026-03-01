@@ -16,6 +16,9 @@ export class SceneController extends Component {
 
     static group = "General 3D";
 
+    static baseType = "sceneController";
+    static type = "sceneController";
+
     start() {
         this.renderer = this.getFirstParentOfType(Renderer3D);
         if (!this.renderer) this.enable = false;
