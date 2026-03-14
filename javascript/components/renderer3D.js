@@ -64,8 +64,10 @@ export class Renderer3D extends Component {
         this.maxTextureSize = 2048;
     }
 
-    static baseType = "renderer3D"
-    static type = "renderer3D"
+    static baseType = "renderer3D";
+    static type = "renderer3D";
+
+    static group = "General 3D";
 
     updateResolution() {
         this.resolution.width = this.viewport.actualResolution.width;
