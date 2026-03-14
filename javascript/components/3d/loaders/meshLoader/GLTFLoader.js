@@ -33,8 +33,10 @@ export class GLTFLoader extends Object3d {
         this.maxTextureSize = "global";
     }
 
-    static baseType = "loader";
+    static baseType = "mesh";
     static type = "gltfLoader";
+
+    static group = "3D Mesh Loaders";
 
     static loader = new THREE.GLTFLoader();
     static ktx2Loader = null;

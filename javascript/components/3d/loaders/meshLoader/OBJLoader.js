@@ -19,8 +19,10 @@ export class OBJLoader extends Object3d {
         this.loaded = false;
     }
 
-    static baseType = "loader"
+    static baseType = "mesh"
     static type = "objLoader"
+
+    static group = "3D Mesh Loaders";
 
     static objLoader = new THREE.OBJLoader();
     static mtlLoader = new THREE.MTLLoader();
