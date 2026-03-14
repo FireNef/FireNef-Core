@@ -16,6 +16,8 @@ export class Component {
 
         this.attributes = [];
         this.attributeDisableValue = 0;
+
+        this.id = null;
     }
 
     static icon = ["component"];
@@ -99,6 +101,10 @@ export class Component {
         return this.children.length !== 0;
     }
 
+    namedChild(name) {
+        return this.children.find(c => c.name === name);
+    }
+
     get child() {
         const grouped = {};
 
@@ -146,6 +152,17 @@ export class Component {
         return Object.freeze(result);
     }
 
+    setID(id) {
+        this.id = id;
+        const componentController = this.getFirstParentOfType(ComponentController);
+        componentController?.updateComponentID(this);
+    }
+
+    getComponentWithID(id) {
+        if (this.id === id) return this;
+        return this.getFirstParentOfType(ComponentController)?.getComponentWithID(id);
+    }
+
     getChildrenRunOrder() {
         return this.children;
     }
@@ -161,23 +178,46 @@ export class Component {
             cloned.children.push(childClone);
         }
 
+        cloned.updateAllProperties();
+
         return cloned;
+    }
+
+    updateAllProperties() {
+
+    }
+
+    async onRenderInit() {
+
+    }
+
+    async traverse(callback) {
+        await callback(this);
+        for (const child of this.children) {
+            await child.traverse(callback);
+        }
     }
 
     getAttributeFieldValue(attribute = 0, field = 0) {
         return this.attributes[attribute].fields[field].value;
     }
 
-    async setAttributeFieldValue(attribute = 0, field = 0, value, type) {
-        return await this.attributes[attribute].fields[field].setValue(value, type);
+    attribute(name) {
+        for (const attr of this.attributes) {
+            if (attr.name.toLowerCase() === name.toLowerCase()) return attr;
+        }
     }
 
-    setNonAsyncAttributeFieldValue(attribute = 0, field = 0, value, type, disableComponent = false) {
+    async setAttributeFieldValue(attribute = 0, field = 0, value, type, inputs = {}) {
+        return await this.attributes[attribute].fields[field].setValue(value, type, { component: this, ...inputs });
+    }
+
+    setNonAsyncAttributeFieldValue(attribute = 0, field = 0, value, type, inputs = {}, disableComponent = false) {
         if (disableComponent) {
             this.enable = false;
             this.attributeDisableValue++;
         };
-        this.attributes[attribute].fields[field].setValue(value, type).then(() => {
+        this.attributes[attribute].fields[field].setValue(value, type, { component: this, ...inputs }).then(() => {
             if (disableComponent) {
                 this.attributeDisableValue--;
                 if (this.attributeDisableValue <= 0) {
@@ -277,5 +317,60 @@ export class Component {
 
     update() {
 
+    }
+}
+
+export class ComponentController extends Component {
+    constructor(name = "Component Controller") {
+        super(name);
+
+        this.updateDepthLimit = 100000;
+
+        this.idTable = {};
+    }
+
+    static icon = ["componentController", ...super.icon];
+
+    static baseType = "componentController"
+    static type = "componentController"
+
+    update() {
+        if (!this.enable) return;
+        this.runChildrenCluster(this.children);
+    }
+
+    runChildrenCluster(children, depth = 0) {
+        if (!children) return;
+        if (children.length === 0) return;
+        if (depth >= this.updateDepthLimit) return;
+
+        for (const child of children) {
+            if (!child.enable) continue;
+            this.runChild(child);
+            this.runChildrenCluster(child.getChildrenRunOrder(), depth + 1);
+        }
+    }
+
+    runChild(child) {
+        if (child.start && typeof child.start === "function") {
+            if (!child.started) {
+                try { child.start(); } catch (e) { console.error(e); }
+                child.started = true;
+            }
+        }
+        if (child.update && typeof child.update === "function") {
+            try { child.update(); } catch (e) { console.error(e); }
+        }
+    }
+
+    updateComponentID(component) {
+        if (Object.values(this.idTable).includes(component)) {
+            delete this.idTable[component.id];
+        }
+        this.idTable[component.id] = component;
+    }
+
+    getComponentWithID(id) {
+        return this.idTable[id] ?? null;
     }
 }

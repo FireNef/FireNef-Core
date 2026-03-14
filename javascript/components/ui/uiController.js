@@ -7,8 +7,8 @@ export class UiController extends Component {
         super(name);
 
         const uiControllerAttribute = new Attribute("Ui Controller");
-        uiControllerAttribute.addField("css", "text", "");
-        uiControllerAttribute.addField("Ui Scale", "number", 1);
+        uiControllerAttribute.addField("css", "text", "", { fileSelect: "text/css", textField: "wide" });
+        uiControllerAttribute.addField("Ui Scale", "number", 1, { min: 0 });
         uiControllerAttribute.addField("Isolate Scale", "boolean", true);
 
         this.attributes.push(uiControllerAttribute);

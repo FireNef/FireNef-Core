@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { Object3d } from "./object3d.js";
+import { SceneComponent } from "./scene.js";
 import { Attribute } from "../attributes.js";
 
 export class DirectionalLightComponent extends Object3d {
@@ -17,6 +18,10 @@ export class DirectionalLightComponent extends Object3d {
 
     static baseType = "directionalLight"
     static type = "directionalLight"
+
+    updateAllProperties() {
+        this.updateLightProperties();
+    }
 
     updateLightProperties() {
         const color = this.getAttributeFieldValue(1, 0);
@@ -53,6 +58,10 @@ export class PointLightComponent extends Object3d {
     static baseType = "pointLight"
     static type = "pointLight"
 
+    updateAllProperties() {
+        this.updateLightProperties()
+    }
+
     updateLightProperties() {
         const color = this.getAttributeFieldValue(1, 0)
         const intensity = this.getAttributeFieldValue(1, 1)
@@ -76,8 +85,10 @@ export class PointLightComponent extends Object3d {
 }
 
 export class SpotLightComponent extends Object3d {
+
     constructor(name = "Spot Light") {
         super(name)
+
         const lightAttribute = new Attribute("Spot Light")
         lightAttribute.addField("Color", "color", "#FFFFFF")
         lightAttribute.addField("Intensity", "number", 1)
@@ -86,24 +97,36 @@ export class SpotLightComponent extends Object3d {
         lightAttribute.addField("Penumbra", "number", 0.1)
         lightAttribute.addField("Decay", "number", 2)
         lightAttribute.addField("Cast Shadows", "boolean", false)
-        lightAttribute.addField("Target", "vector3", { x: 0, y: 0, z: -1 }) // default forward
+
         this.attributes.push(lightAttribute)
 
+        // Create spotlight
         this.object3D = new THREE.SpotLight(0xffffff, 1)
         this.object3D.name = name
-        this.object3D.castShadow = true
+        this.object3D.castShadow = false
         this.object3D.shadow.normalBias = 0.02
         this.object3D.shadow.bias = -0.0005
 
-        // Create a target object for the spotlight
+        // Create target (NOT parented to the light)
         this.target = new THREE.Object3D()
         this.object3D.target = this.target
-        this.target.position.set(0, 0, -1) // default forward
-        this.object3D.add(this.target)
+
+        // Internal reusable vectors (no GC spam)
+        this._forward = new THREE.Vector3()
+        this._quat = new THREE.Quaternion()
+        this._worldPos = new THREE.Vector3()
     }
 
     static baseType = "spotLight"
     static type = "spotLight"
+
+    start() {
+        this.getFirstParentOfType(SceneComponent).object3D.add(this.target);
+    }
+
+    updateAllProperties() {
+        this.updateLightProperties();
+    }
 
     updateLightProperties() {
         const color = this.getAttributeFieldValue(1, 0)
@@ -114,7 +137,7 @@ export class SpotLightComponent extends Object3d {
         const decay = this.getAttributeFieldValue(1, 5)
         const castShadows = this.getAttributeFieldValue(1, 6)
 
-        this.object3D.color = new THREE.Color(color)
+        this.object3D.color.set(color) // FIXED
         this.object3D.intensity = intensity
         this.object3D.distance = distance
         this.object3D.angle = angle
@@ -123,10 +146,29 @@ export class SpotLightComponent extends Object3d {
         this.object3D.castShadow = castShadows
     }
 
-    // Keep the spotlight always pointing forward
-    update() {
-        if (!this.object3D.parent) return
-        this.target.position.set(0, 0, -1) // forward relative to parent
+    renderUpdate(alpha = 1.0) {
+        super.renderUpdate(alpha);
+
+        if (!this.object3D.parent) return;
+
+        // Make sure world matrices are updated
+        this.object3D.updateMatrixWorld(true);
+
+        // Get interpolated WORLD position
+        this.object3D.getWorldPosition(this._worldPos);
+
+        // Get interpolated WORLD rotation
+        this.object3D.getWorldQuaternion(this._quat);
+
+        // Forward vector
+        this._forward.set(0, 0, -1);
+        this._forward.applyQuaternion(this._quat);
+
+        // Place target 1 unit forward in world space
+        this.target.position.copy(this._worldPos).add(this._forward);
+
+        // Ensure target matrix updates too
+        this.target.updateMatrixWorld(true);
     }
 
     async setAttributeFieldValue(attribute = 0, field = 0, value, type) {
@@ -149,6 +191,10 @@ export class AmbientLightComponent extends Object3d {
 
     static baseType = "ambientLight"
     static type = "ambientLight"
+
+    updateAllProperties() {
+        this.updateLightProperties()
+    }
 
     updateLightProperties() {
         const color = this.getAttributeFieldValue(1, 0)
@@ -179,6 +225,10 @@ export class HemisphereLightComponent extends Object3d {
 
     static baseType = "hemisphereLight"
     static type = "hemisphereLight"
+
+    updateAllProperties() {
+        this.updateLightProperties()
+    }
 
     updateLightProperties() {
         const skyColor = this.getAttributeFieldValue(1, 0)

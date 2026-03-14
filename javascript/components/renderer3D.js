@@ -9,24 +9,30 @@ export class Renderer3D extends Component {
 
         const framerateAttribute = new Attribute("Frame Rate");
         framerateAttribute.addField("Cap FPS", "boolean", true);
-        framerateAttribute.addField("Max FPS", "number", 60);
+        framerateAttribute.addField("Max FPS", "number", 60, { min: 1, max: 250 });
         framerateAttribute.addField("Use Vsync", "boolean", true);
 
         const rendererAttribute = new Attribute("Renderer");
-        rendererAttribute.addField("Output Color Space", "three", THREE.SRGBColorSpace);
-        rendererAttribute.addField("Tone Mapping", "three", THREE.ACESFilmicToneMapping);
-        rendererAttribute.addField("Tone Mapping Exposure", "number", 1);
+        rendererAttribute.addField("Output Color Space", "three", THREE.SRGBColorSpace, { defaultValue: "THREE.SRGBColorSpace", options: ["THREE.SRGBColorSpace", "THREE.LinearSRGBColorSpace"] });
+        rendererAttribute.addField("Tone Mapping", "three", THREE.ACESFilmicToneMapping, { defaultValue: "THREE.ACESFilmicToneMapping", options: ["THREE.NoToneMapping", "THREE.LinearToneMapping", "THREE.ReinhardToneMapping", "THREE.CineonToneMapping", "THREE.ACESFilmicToneMapping"] });
+        rendererAttribute.addField("Tone Mapping Exposure", "number", 1, { min: 0, max: 2 });
         rendererAttribute.addField("Shadow Map Enabled", "boolean", true);
-        rendererAttribute.addField("Shadow Map Type", "three", THREE.PCFSoftShadowMap);
+        rendererAttribute.addField("Shadow Map Type", "three", THREE.PCFSoftShadowMap, { defaultValue: "THREE.PCFSoftShadowMap", options: ["THREE.BasicShadowMap", "THREE.PCFShadowMap", "THREE.PCFSoftShadowMap", "THREE.VSMShadowMap"] });
         rendererAttribute.addField("Antialias", "boolean", true);
-        
+
+        const performanceAttribute = new Attribute("Performance");
+        performanceAttribute.addField("Max Texture Size", "number", 2048, { min: 1, max: 4096 });
+
         this.attributes.push(framerateAttribute);
         this.attributes.push(rendererAttribute);
+        this.attributes.push(performanceAttribute);
 
         this.renderer = null;
         this.engine = null;
 
         this.running = false;
+
+        this.initialized = false;
 
         this.renderLoopId = null;
 
@@ -54,6 +60,8 @@ export class Renderer3D extends Component {
 
         this.resolution = { width: 1920, height: 1080 };
         this.aspectRatio = 16 / 9;
+
+        this.maxTextureSize = 2048;
     }
 
     static baseType = "renderer3D"
@@ -110,8 +118,23 @@ export class Renderer3D extends Component {
             this.pmremGenerator = new THREE.PMREMGenerator(this.renderer);
             this.pmremGenerator.compileEquirectangularShader();
 
+            this.updateSettings();
+
+            this.initialized = true;
+
+            await this.traverse(async (child) => {
+                if (child.onRenderInit && typeof child.onRenderInit === "function") await child.onRenderInit();
+            });
+
+            console.log("Renderer 3D initialized.");
+
             this.startRenderLoop();
         })();
+    }
+
+    getChildrenRunOrder() {
+        if (!this.running) return [];
+        return this.children;
     }
 
     async setAttributeFieldValue(attribute = 0, field = 0, value, type) {
@@ -121,13 +144,19 @@ export class Renderer3D extends Component {
             if (field == 1) this.setMaxFPS(value);
             if (field == 2) this.setVsync();
         }
-        if (attribute == 1) {
-            if (field == 0) this.renderer.outputEncoding = value;
-            if (field == 1) this.renderer.toneMapping = value;
-            if (field == 2) this.renderer.toneMappingExposure = value;
-            if (field == 3) this.renderer.shadowMap.enabled = value;
-            if (field == 4) this.renderer.shadowMap.type = value;
+        if (attribute == 1) this.updateSettings();
+        if (attribute == 2) {
+            if (field == 0) this.maxTextureSize = this.getAttributeFieldValue(2, 0);
         }
+    }
+
+    updateSettings() {
+        if (!this.renderer) return;
+        this.renderer.outputEncoding = this.getAttributeFieldValue(1, 0);
+        this.renderer.toneMapping = this.getAttributeFieldValue(1, 1);
+        this.renderer.toneMappingExposure = this.getAttributeFieldValue(1, 2);
+        this.renderer.shadowMap.enabled = this.getAttributeFieldValue(1, 3);
+        this.renderer.shadowMap.type = this.getAttributeFieldValue(1, 4);
     }
 
     startRenderLoop() {
