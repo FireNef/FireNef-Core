@@ -107,8 +107,8 @@ export class UiController extends Component {
         this.resolution = this.viewport.actualResolution;
 
         if (!this.getAttributeFieldValue(0, 2)) {
-            this.element.style.width = "100%";
-            this.element.style.height = "100%";
+            this.element.style.width = `${100/this.getAttributeFieldValue(0, 1)}%`;
+            this.element.style.height = `${100/this.getAttributeFieldValue(0, 1)}%`;
             return;
         }
 
@@ -118,7 +118,7 @@ export class UiController extends Component {
 
     resize() {
         if (!this.getAttributeFieldValue(0, 2)) {
-            this.element.style.transform = `scale(1)`;
+            this.element.style.transform = `scale(${this.getAttributeFieldValue(0, 1)})`;
             return;
         }
 
