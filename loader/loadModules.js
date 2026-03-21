@@ -38,7 +38,7 @@ async function initializeComponents(components, modules, sourcePath) {
             }
         }
 
-        if (module.id) component.setID(module.id);
+        if (module.id && module.id != "") component.setID(module.id);
 
         if (module.visible === false) component.visible = false;
         if (module.enable === false) component.enable = false;
