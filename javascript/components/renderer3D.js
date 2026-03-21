@@ -106,7 +106,7 @@ export class Renderer3D extends Component {
             this.canvasElement.width = this.resolution.width;
             this.canvasElement.height = this.resolution.height;
 
-            this.renderer.setPixelRatio(window.devicePixelRatio);
+            this.renderer.setPixelRatio(1);
             this.renderer.setSize(this.resolution.width, this.resolution.height, false);
             this.renderer.outputEncoding = this.getAttributeFieldValue(1, 0);
             this.renderer.toneMapping = this.getAttributeFieldValue(1, 1);
