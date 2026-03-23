@@ -18,8 +18,8 @@ export class SceneComponent extends Object3d {
 
         const sceneAttribute = new Attribute("Scene");
         sceneAttribute.addField("Background", "texture,color", "#000000");
-        sceneAttribute.addField("Background Blurriness", "number", 0, { min: 0 });
-        sceneAttribute.addField("Background Intensity", "number", 1, { min: 0 });
+        sceneAttribute.addField("Background Blurriness", "number", 0, { min: 0, max: 1 });
+        sceneAttribute.addField("Background Intensity", "number", 1, { min: 0, max: 1 });
         sceneAttribute.addField("Background Rotation", "euler", { x: 0, y: 0, z: 0, order: "XYZ" });
         sceneAttribute.addField("Override Material", "material", null);
         sceneAttribute.addField("Auto Update", "boolean", true);
