@@ -1,7 +1,6 @@
 import { Component } from "../component.js";
 import { Attribute } from "../attributes.js";
 import * as THREE from "three";
-import { step } from "three/src/nodes/math/MathNode.js";
 
 export class TextureComponent extends Component {
     static loader = new THREE.TextureLoader();
