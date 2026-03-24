@@ -34,7 +34,7 @@ export class SceneComponent extends Object3d {
         const fogAttribute = new Attribute("Fog");
         fogAttribute.addField("Fog Enabled", "boolean", false);
         fogAttribute.addField("Fog Type", "string", "linear", { defaultValue: "linear", options: ["linear", "exponential2"] });
-        fogAttribute.addField("Fog Color", "color", new THREE.Color("#000000"), { defaultValue: "#000000" });
+        fogAttribute.addField("Fog Color", "color", "#000000");
         fogAttribute.addField("Fog Near", "number", 1, { min: 0 });
         fogAttribute.addField("Fog Far", "number", 1000, { min: 0 });
         fogAttribute.addField("Fog Density", "number", 1, { min: 0 });
@@ -161,9 +161,9 @@ export class SceneComponent extends Object3d {
         }
 
         if (this.getAttributeFieldValue(2, 1) === "linear") {
-            this.object3D.fog = new THREE.Fog(this.getAttributeFieldValue(2, 2), this.getAttributeFieldValue(2, 3), this.getAttributeFieldValue(2, 4));
+            this.object3D.fog = new THREE.Fog(new THREE.Color(this.getAttributeFieldValue(2, 2)), this.getAttributeFieldValue(2, 3), this.getAttributeFieldValue(2, 4));
         } else {
-            this.object3D.fog = new THREE.FogExp2(this.getAttributeFieldValue(2, 2), this.getAttributeFieldValue(2, 5));
+            this.object3D.fog = new THREE.FogExp2(new THREE.Color(this.getAttributeFieldValue(2, 2)), this.getAttributeFieldValue(2, 2), this.getAttributeFieldValue(2, 5));
         }
     }
 }
