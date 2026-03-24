@@ -48,6 +48,12 @@ export class SceneComponent extends Object3d {
     static baseType = "scene";
     static type = "scene";
 
+    updateAllProperties() {
+        this.updateScene();
+        this.updateEnvironment();
+        this.updateFog();
+    }
+
     async updateEnvironment() {
         const renderer = this.getFirstParentOfType(Renderer3D);
 
@@ -107,7 +113,7 @@ export class SceneComponent extends Object3d {
 
     start() {
         this.updateDepthLimit = this.getFirstParentOfType(ComponentController)?.updateDepthLimit || 100000;
-        this.updateEnvironment();
+        this.updateAllProperties();
     }
 
     update() {

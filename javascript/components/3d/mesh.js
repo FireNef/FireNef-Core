@@ -27,7 +27,12 @@ export class MeshComponent extends Object3d {
 
     start() {
         super.start();
+        this.updateAllProperties();
+    }
+
+    updateAllProperties() {
         this.updateMesh();
+        if (this.getAttributeFieldValue(1, 1)) this.getAttributeFieldValue(1, 1).updateAllProperties();
     }
 
     updateMesh() {
