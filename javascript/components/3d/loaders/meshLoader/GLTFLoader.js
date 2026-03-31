@@ -83,7 +83,6 @@ export class GLTFLoader extends Object3d {
             GLTFLoader.ktx2Loader.detectSupport( renderer );
 
             GLTFLoader.loader.setKTX2Loader(GLTFLoader.ktx2Loader);
-            console.log(GLTFLoader.ktx2Loader);
         }
 
         await this.updateMesh();
@@ -113,7 +112,6 @@ export class GLTFLoader extends Object3d {
                         if (tex && tex.image) {
                             const w = tex.image.width;
                             const h = tex.image.height;
-                            console.log(w, h);
                             if (w > maxSize || h > maxSize) {
                                 const canvas = document.createElement('canvas');
                                 const scale = Math.min(maxSize / w, maxSize / h);

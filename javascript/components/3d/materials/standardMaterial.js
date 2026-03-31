@@ -117,7 +117,7 @@ export class StandardMaterialComponent extends Component {
         this.material.color.set(this.getAttr("Core", "Color"));
         this.material.opacity = this.getAttr("Core", "Opacity");
         this.material.transparent = this.getAttr("Core", "Transparent");
-        this.material.map = this.getAttr("Core", "Map")?.texture ?? null;
+        this.material.map = this.getAttr("Core", "Texture")?.texture ?? null;
         this.material.alphaMap = this.getAttr("Core", "Alpha Map")?.texture ?? null;
         this.material.side = this.getAttr("Core", "Side");
         this.material.wireframe = this.getAttr("Core", "Wireframe");
@@ -136,9 +136,9 @@ export class StandardMaterialComponent extends Component {
 
     updateEmissionMaterialProperties() {
         if (!this.usesEmission) return;
-        this.material.emissive.set(this.getAttr("Emission", "Color"));
-        this.material.emissiveIntensity = this.getAttr("Emission", "Intensity");
-        this.material.emissiveMap = this.getAttr("Emission", "Map")?.texture ?? null;
+        this.material.emissive.set(this.getAttr("Emission", "Emissive Color"));
+        this.material.emissiveIntensity = this.getAttr("Emission", "Emissive Intensity");
+        this.material.emissiveMap = this.getAttr("Emission", "Emissive Map")?.texture ?? null;
         this.material.needsUpdate = true;
     }
 
@@ -162,22 +162,22 @@ export class StandardMaterialComponent extends Component {
 
     updateLightMaterialProperties() {
         if (!this.usesLight) return;
-        this.material.lightMap = this.getAttr("Light", "Map")?.texture ?? null;
-        this.material.lightMapIntensity = this.getAttr("Light", "Intensity");
+        this.material.lightMap = this.getAttr("Light", "Light Map")?.texture ?? null;
+        this.material.lightMapIntensity = this.getAttr("Light", "Light Map Intensity");
         this.material.needsUpdate = true;
     }
 
     updateAmbientMaterialProperties() {
         if (!this.usesAmbient) return;
-        this.material.aoMap = this.getAttr("Ambient", "Map")?.texture ?? null;
-        this.material.aoMapIntensity = this.getAttr("Ambient", "Intensity");
+        this.material.aoMap = this.getAttr("Ambient", "AO Map")?.texture ?? null;
+        this.material.aoMapIntensity = this.getAttr("Ambient", "AO Intensity");
         this.material.needsUpdate = true;
     }
 
     updateReflectionMaterialProperties() {
         if (!this.usesReflection) return;
-        this.material.envMap = this.getAttr("Reflection", "Map")?.texture ?? null;
-        this.material.envMapIntensity = this.getAttr("Reflection", "Intensity");
+        this.material.envMap = this.getAttr("Reflection", "Env Map")?.texture ?? null;
+        this.material.envMapIntensity = this.getAttr("Reflection", "Env Map Intensity");
         this.material.needsUpdate = true;
     }
 
