@@ -2,8 +2,8 @@ import { Attribute } from "../../attributes.js";
 import { RapierCollider } from "./rapierCollider.js";
 import * as RAPIER from "rapier";
 
-export class RapierConeCollider extends RapierCollider {
-    constructor(name = "Rapier Cone Collider") {
+export class RapierRoundConeCollider extends RapierCollider {
+    constructor(name = "Rapier Round Cone Collider") {
         super(name);
 
         const shapeAttribute = new Attribute("Shape");
@@ -13,7 +13,7 @@ export class RapierConeCollider extends RapierCollider {
         this.attributes.push(shapeAttribute);
     }
 
-    static type = "rapierConeCollider";
+    static type = "rapierRoundConeCollider";
 
     updateShape() {
         const height = this.getAttr("Shape", "Height");
