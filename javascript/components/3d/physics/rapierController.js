@@ -24,15 +24,18 @@ export class RapierController extends Component {
 
     start() {
         (async () => {
-            await RAPIER.init();
+            await RAPIER.init({});
 
-            this.world = new RAPIER.World(this.getAttributeFieldValue(0, 0));
+            const gravity = this.getAttributeFieldValue(0, 0);
+
+            this.world = new RAPIER.World({ gravity });
             this.initialized = true;
         })();
     }
 
     update() {
         if (!this.initialized) return;
+        if (this.world.bodies.map.size === 0) return;
         this.world.step();
     }
 
