@@ -72,6 +72,12 @@ export class RapierRigidBody extends Component {
 
         this.rigidBody.setRotation({x: quaternion.x, y: quaternion.y, z: quaternion.z, w: quaternion.w}, true);
 
+        const linear = this.getAttr("Velocity", "Linear");
+        this.rigidBody.setLinvel(linear, true);
+
+        const angular = this.getAttr("Velocity", "Angular");
+        this.rigidBody.setAngvel(angular, true);
+
         if (!this.getAttr("Core", "Start Awake")) {
             this.rigidBody.sleep();
         }
@@ -165,15 +171,17 @@ export class RapierRigidBody extends Component {
         this.desc.setCanSleep(this.getAttr("Core", "Can Sleep"));
         this.desc.setCcdEnabled(this.getAttr("Core", "CCD"));
 
-        this.desc.lockTranslations(
-            this.getAttr("Lock", "Linear X"),
-            this.getAttr("Lock", "Linear Y"),
-            this.getAttr("Lock", "Linear Z")
+        this.desc.restrictTranslations(
+            !this.getAttr("Lock", "Linear X"),
+            !this.getAttr("Lock", "Linear Y"),
+            !this.getAttr("Lock", "Linear Z"),
+            true
         );
-        this.desc.lockRotations(
-            this.getAttr("Lock", "Angular X"),
-            this.getAttr("Lock", "Angular Y"),
-            this.getAttr("Lock", "Angular Z")
+        this.desc.restrictRotations(
+            !this.getAttr("Lock", "Angular X"),
+            !this.getAttr("Lock", "Angular Y"),
+            !this.getAttr("Lock", "Angular Z"),
+            true
         );
     }
 
@@ -189,15 +197,17 @@ export class RapierRigidBody extends Component {
     updateLock() {
         if (!this.rigidBody) return;
 
-        this.rigidBody.lockTranslations(
-            this.getAttr("Lock", "Linear X"),
-            this.getAttr("Lock", "Linear Y"),
-            this.getAttr("Lock", "Linear Z")
+        this.rigidBody.restrictTranslations(
+            !this.getAttr("Lock", "Linear X"),
+            !this.getAttr("Lock", "Linear Y"),
+            !this.getAttr("Lock", "Linear Z"),
+            true
         );
-        this.rigidBody.lockRotations(
-            this.getAttr("Lock", "Angular X"),
-            this.getAttr("Lock", "Angular Y"),
-            this.getAttr("Lock", "Angular Z")
+        this.rigidBody.restrictRotations(
+            !this.getAttr("Lock", "Angular X"),
+            !this.getAttr("Lock", "Angular Y"),
+            !this.getAttr("Lock", "Angular Z"),
+            true
         );
     }
 
@@ -341,7 +351,7 @@ export class RapierRigidBody extends Component {
     }
 
     awake() {
-        if (this.rigidBody) this.rigidBody.wake();
+        if (this.rigidBody) this.rigidBody.wakeUp();
     }
 
     sleep() {

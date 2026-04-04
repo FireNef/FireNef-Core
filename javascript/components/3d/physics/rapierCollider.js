@@ -85,7 +85,8 @@ export class RapierCollider extends Component {
     updateDescTransform() {
         if (!this.desc) return;
 
-        this.desc.setTranslation(this.getAttr("Transform Offset", "Position Offset"));
+        const translation = this.getAttr("Transform Offset", "Position Offset");
+        this.desc.setTranslation(translation.x, translation.y, translation.z);
 
         const rotation = this.getAttr("Transform Offset", "Rotation Offset");
         const euler = new THREE.Euler(
@@ -124,7 +125,8 @@ export class RapierCollider extends Component {
     updateTransform() {
         if (!this.collider) return;
 
-        this.collider.setTranslation(this.getAttr("Transform Offset", "Position Offset"));
+        const translation = this.getAttr("Transform Offset", "Position Offset");
+        this.collider.setTranslation(translation.x, translation.y, translation.z);
 
         const rotation = this.getAttr("Transform Offset", "Rotation Offset");
         const euler = new THREE.Euler(

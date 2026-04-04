@@ -26,9 +26,9 @@ export class RapierController extends Component {
         (async () => {
             await RAPIER.init({});
 
-            const gravity = this.getAttributeFieldValue(0, 0);
+            const gravity = this.getAttr("Rapier Controller", "Gravity");
 
-            this.world = new RAPIER.World({ gravity });
+            this.world = new RAPIER.World(gravity);
             this.initialized = true;
         })();
     }
