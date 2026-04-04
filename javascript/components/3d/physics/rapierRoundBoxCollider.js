@@ -15,6 +15,9 @@ export class RapierRoundBoxCollider extends RapierCollider {
     static type = "rapierRoundBoxCollider";
 
     updateShape() {
+        const size = this.getAttr("Shape", "Size");
+        const roundRadius = this.getAttr("Shape", "Round Radius");
+
         const hx = Math.max(0.0001, size.x / 2);
         const hy = Math.max(0.0001, size.y / 2);
         const hz = Math.max(0.0001, size.z / 2);
