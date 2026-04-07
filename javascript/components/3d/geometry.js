@@ -12,6 +12,14 @@ export class GeometryComponent extends Component {
         this.geometry = null;
     }
 
+    static group = "3D Geometries";
+    static {
+        this.hideInGroup = true;
+    }
+
+    static baseType = "geometry"
+    static type = "geometry"
+
     start() {
         this.updateAllProperties();
     }
