@@ -6,7 +6,7 @@ export class MeshComponent extends Object3d {
     constructor(name = "Mesh") {
         super(name);
         const meshAttribute = new Attribute("Mesh");
-        meshAttribute.addField("Geometry", "three", null);
+        meshAttribute.addField("Geometry", "component", null);
         meshAttribute.addField("Material", "component", null);
         meshAttribute.addField("Cast Shadows", "boolean", true);
         meshAttribute.addField("Receive Shadows", "boolean", true);
