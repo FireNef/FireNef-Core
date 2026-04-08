@@ -28,7 +28,8 @@ export class DirectionalLightComponent extends Object3d {
         this.renderer3d = this.getFirstParentOfType(Renderer3D);
         if (!this.renderer3d) return;
 
-        this.object3D.mapSize(this.renderer3d.shadowMapSize, this.renderer3d.shadowMapSize);
+        this.object3D.shadow.mapSize.width = this.renderer3d.shadowMapSize;
+        this.object3D.shadow.mapSize.height = this.renderer3d.shadowMapSize;
     }
 
     updateAllProperties() {
@@ -78,7 +79,8 @@ export class PointLightComponent extends Object3d {
         this.renderer3d = this.getFirstParentOfType(Renderer3D);
         if (!this.renderer3d) return;
 
-        this.object3D.mapSize(this.renderer3d.shadowMapSize, this.renderer3d.shadowMapSize);
+        this.object3D.shadow.mapSize.width = this.renderer3d.shadowMapSize;
+        this.object3D.shadow.mapSize.height = this.renderer3d.shadowMapSize;
     }
 
     updateAllProperties() {
@@ -149,7 +151,8 @@ export class SpotLightComponent extends Object3d {
         this.renderer3d = this.getFirstParentOfType(Renderer3D);
         if (!this.renderer3d) return;
 
-        this.object3D.mapSize(this.renderer3d.shadowMapSize, this.renderer3d.shadowMapSize);
+        this.object3D.shadow.mapSize.width = this.renderer3d.shadowMapSize;
+        this.object3D.shadow.mapSize.height = this.renderer3d.shadowMapSize;
     }
 
     updateAllProperties() {
