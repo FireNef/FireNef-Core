@@ -45,8 +45,8 @@ export class DirectionalLightComponent extends Object3d {
         this.object3D.color.set(color);
         this.object3D.intensity = intensity;
         this.object3D.castShadow = castShadows;
-        //this.object3D.shadow.normalBias = 0.02;
-        //this.object3D.shadow.bias = -0.0005
+        this.object3D.shadow.normalBias = 0.0001;
+        this.object3D.shadow.bias = -0.0001;
     }
 
     async setAttributeFieldValue(attribute = 0, field = 0, value, type) {
@@ -103,8 +103,8 @@ export class PointLightComponent extends Object3d {
         this.object3D.distance = distance;
         this.object3D.decay = decay;
         this.object3D.castShadow = castShadows;
-        //this.object3D.shadow.normalBias = 0.02;
-        //this.object3D.shadow.bias = -0.0005;
+        this.object3D.shadow.normalBias = 0.0001;
+        this.object3D.shadow.bias = -0.0001;
     }
 
     async setAttributeFieldValue(attribute = 0, field = 0, value, type) {
@@ -132,8 +132,8 @@ export class SpotLightComponent extends Object3d {
         this.object3D = new THREE.SpotLight(0xffffff, 1);
         this.object3D.name = name;
         this.object3D.castShadow = false;
-        //this.object3D.shadow.normalBias = 0.02;
-        //this.object3D.shadow.bias = -0.0005;
+        this.object3D.shadow.normalBias = 0.0001;
+        this.object3D.shadow.bias = -0.0001;
 
         this.target = new THREE.Object3D();
         this.object3D.target = this.target;
