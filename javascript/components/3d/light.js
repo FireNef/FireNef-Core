@@ -25,6 +25,8 @@ export class DirectionalLightComponent extends Object3d {
     static group = "Lights";
 
     start() {
+        super.start();
+
         this.renderer3d = this.getFirstParentOfType(Renderer3D);
         if (!this.renderer3d) return;
 
@@ -76,6 +78,8 @@ export class PointLightComponent extends Object3d {
     static group = "Lights";
 
     start() {
+        super.start();
+
         this.renderer3d = this.getFirstParentOfType(Renderer3D);
         if (!this.renderer3d) return;
 
@@ -147,6 +151,7 @@ export class SpotLightComponent extends Object3d {
     static group = "Lights";
 
     start() {
+        super.start();
         this.getFirstParentOfType(SceneComponent).object3D.add(this.target);
         this.renderer3d = this.getFirstParentOfType(Renderer3D);
         if (!this.renderer3d) return;
