@@ -173,8 +173,8 @@ export class StandardMaterialComponent extends Component {
 
     updateAmbientMaterialProperties() {
         if (!this.usesAmbient) return;
-        this.material.aoMap = this.getAttr("Ambient", "AO Map")?.texture ?? null;
-        this.material.aoMapIntensity = this.getAttr("Ambient", "AO Intensity");
+        this.material.aoMap = this.getAttr("Ambient Occlusion", "AO Map")?.texture ?? null;
+        this.material.aoMapIntensity = this.getAttr("Ambient Occlusion", "AO Intensity");
         this.material.needsUpdate = true;
     }
 
