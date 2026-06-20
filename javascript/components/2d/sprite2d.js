@@ -1,6 +1,7 @@
 import { Object2d } from "./object2d.js";
 import { Attribute } from "../attributes.js";
 import { Renderer2D } from "../renderer2D.js";
+import PIXI from "pixi.js";
 
 export class Sprite2D extends Object2d {
     constructor(name = "Sprite2D") {
