@@ -1,6 +1,6 @@
-import { Object2d } from "./object2d";
-import { Attribute } from "../../core/attribute";
-import { Scene2DComponent } from "./scene2d";
+import { Object2d } from "./object2d.js";
+import { Attribute } from "../attributes.js";
+import { Scene2DComponent } from "./scene2d.js";
 
 export class Camera2DComponent extends Object2d {
     constructor(name = "Camera 2d") {
