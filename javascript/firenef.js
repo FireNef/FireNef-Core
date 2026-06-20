@@ -13,6 +13,7 @@ export * from "./components/ui/uiElement.js";
 export * from "./components/ui/svgElement.js";
 
 export * from "./components/renderer3D.js";
+export * from "./components/renderer2D.js";
 
 export * from "./components/3d/object3d.js";
 export * from "./components/3d/texture3d.js";
@@ -50,11 +51,18 @@ export * from "./components/3d/loaders/meshLoader/OBJLoader.js";
 export * from "./components/3d/physics/rapierController.js";
 export * from "./components/3d/physics/rapierRigidBody.js";
 export * from "./components/3d/physics/rapierCollider.js";
-export * from "./components/3d/physics/rapierBoxCollider.js"
-export * from "./components/3d/physics/rapierSphereCollider.js"
-export * from "./components/3d/physics/rapierCapsuleCollider.js"
-export * from "./components/3d/physics/rapierCylinderCollider.js"
-export * from "./components/3d/physics/rapierConeCollider.js"
-export * from "./components/3d/physics/rapierRoundBoxCollider.js"
-export * from "./components/3d/physics/rapierRoundCylinderCollider.js"
-export * from "./components/3d/physics/rapierRoundConeCollider.js"
+export * from "./components/3d/physics/rapierBoxCollider.js";
+export * from "./components/3d/physics/rapierSphereCollider.js";
+export * from "./components/3d/physics/rapierCapsuleCollider.js";
+export * from "./components/3d/physics/rapierCylinderCollider.js";
+export * from "./components/3d/physics/rapierConeCollider.js";
+export * from "./components/3d/physics/rapierRoundBoxCollider.js";
+export * from "./components/3d/physics/rapierRoundCylinderCollider.js";
+export * from "./components/3d/physics/rapierRoundConeCollider.js";
+
+export * from "./components/2d/object2d.js";
+export * from "./components/2d/group2d.js";
+export * from "./components/2d/scene2d.js";
+export * from "./components/2d/sceneController2d.js";
+export * from "./components/2d/camera2d.js";
+export * from "./components/2d/sprite2d.js";
