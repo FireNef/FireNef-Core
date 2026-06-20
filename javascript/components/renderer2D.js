@@ -2,6 +2,7 @@ import { Component } from "./component.js";
 import { Attribute } from "./attributes.js";
 import { Viewport } from "./viewport.js";
 import * as PIXI from "pixi";
+import 'pixi-unsafe-eval';
 
 export class Renderer2D extends Component {
     constructor(name = "Renderer2D") {
