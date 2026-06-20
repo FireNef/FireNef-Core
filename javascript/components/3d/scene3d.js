@@ -4,7 +4,7 @@ import { Object3d } from "./object3d.js";
 import { Attribute } from "../attributes.js";
 import { ComponentController } from "../component.js";
 import { Renderer3D } from "../renderer3D.js";
-import { TextureComponent } from "./texture3d.js";
+import { Texture3DComponent as TextureComponent } from "./texture3d.js";
 
 export class Scene3DComponent extends Object3d {
     constructor(name = "Scene 3D") {
