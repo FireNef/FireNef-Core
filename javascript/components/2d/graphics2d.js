@@ -59,41 +59,42 @@ export class Graphics2D extends Object2d {
         const lineColor = this.getAttr("Shape", "Line Color");
         const lineAlpha = this.getAttr("Shape", "Line Alpha");
 
-        if (lineWidth > 0) {
-            const parsedLineColor = PIXI.Color.shared.setValue(lineColor).toNumber();
-            this.object2D.lineStyle({
-                width: lineWidth,
-                color: parsedLineColor,
-                alpha: lineAlpha,
-                alignment: 0.5
-            });
-        }
-
-        const parsedFillColor = PIXI.Color.shared.setValue(fillColor).toNumber();
-        this.object2D.beginFill(parsedFillColor, fillAlpha);
-
         switch (type) {
             case "Circle":
-                this.object2D.drawCircle(0, 0, dims.x);
+                this.object2D.circle(0, 0, dims.x);
                 break;
             case "Ellipse":
-                this.object2D.drawEllipse(0, 0, dims.x, dims.y);
+                this.object2D.ellipse(0, 0, dims.x, dims.y);
                 break;
             case "Polygon":
                 const points = this.parsePolygonPoints(polyPathStr);
                 if (points.length >= 6) {
-                    this.object2D.drawPolygon(points);
+                    this.object2D.poly(points);
                 }
                 break;
             case "Rectangle":
             default:
                 const halfW = dims.x / 2;
                 const halfH = dims.y / 2;
-                this.object2D.drawRect(-halfW, -halfH, dims.x, dims.y);
+                this.object2D.rect(-halfW, -halfH, dims.x, dims.y);
                 break;
         }
 
-        this.object2D.endFill();
+        const parsedFillColor = PIXI.Color.shared.setValue(fillColor).toNumber();
+        this.object2D.fill({
+            color: parsedFillColor,
+            alpha: fillAlpha
+        });
+
+        if (lineWidth > 0) {
+            const parsedLineColor = PIXI.Color.shared.setValue(lineColor).toNumber();
+            this.object2D.stroke({
+                width: lineWidth,
+                color: parsedLineColor,
+                alpha: lineAlpha,
+                alignment: 0.5
+            });
+        }
 
         const zIndex = this.getAttr("Shape", "Z Index");
         if (this.object2D.zIndex !== zIndex) {
