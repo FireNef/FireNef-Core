@@ -2,6 +2,7 @@ import { Object2d } from "./object2d.js";
 import { Attribute } from "../attributes.js";
 import { ComponentController } from "../component.js";
 import { Renderer2D } from "../renderer2D.js";
+import * as PIXI from "pixi";
 
 export class Scene2DComponent extends Object2d {
     constructor(name = "Scene 2d") {
@@ -34,6 +35,9 @@ export class Scene2DComponent extends Object2d {
 
     updateEnvironment() {
         this.object2D.sortableChildren = this.getAttr("Environment", "Sort Children");
+
+        const tintHex = this.getAttr("Environment", "Ambient Tint");
+        this.object2D.tint = PIXI.Color.shared.setValue(tintHex).toNumber();
     }
 
     async setAttributeFieldValue(attribute, field, value, type) {
@@ -52,35 +56,34 @@ export class Scene2DComponent extends Object2d {
         
         this.renderUpdateChildCluster(alpha, this.children);
 
-        if (this.currentCamera) {
+        if (this.currentCamera && this.renderer) {
             this.object2D.position.set(0, 0);
             this.object2D.scale.set(1, 1);
             this.object2D.rotation = 0;
 
-            // 1. In v8, use updateLocalTransform to force coordinate updates
             this.currentCamera.object2D.updateLocalTransform();
 
             const cameraGlobalPos = this.currentCamera.object2D.toGlobal({ x: 0, y: 0 });
-
-            // 2. Safely calculate the rotation from the world matrix in Pixi v8
-            const wt = this.currentCamera.object2D.worldTransform;
             
-            // Pixi v8 Matrix uses an internal property tracking array, or you can calculate 
-            // the rotation directly from the matrix vector rotation elements:
-            const cameraGlobalRotRadians = Math.atan2(wt.b, wt.a); 
-
+            const cameraGlobalRotRadians = this.currentCamera.object2D.rotation || 0; 
             const cameraZoom = this.currentCamera.getAttr("Camera", "Zoom") || 1.0;
 
             const screenOffsetX = this.renderer.resolution.width / 2;
             const screenOffsetY = this.renderer.resolution.height / 2;
 
-            this.object2D.scale.set(cameraZoom);
+            const totalXZoom = cameraZoom * this.currentCamera.object2D.scale.x;
+            const totalYZoom = cameraZoom * this.currentCamera.object2D.scale.y;
+
+            this.object2D.scale.set(totalXZoom, totalYZoom);
             this.object2D.rotation = -cameraGlobalRotRadians;
 
-            this.object2D.position.x = screenOffsetX - (cameraGlobalPos.x * cameraZoom);
-            this.object2D.position.y = screenOffsetY - (cameraGlobalPos.y * cameraZoom);
+            this.object2D.position.x = screenOffsetX - (cameraGlobalPos.x * totalXZoom);
+            this.object2D.position.y = screenOffsetY - (cameraGlobalPos.y * totalYZoom);
         } else {
-            this.object2D.position.set(0, 0);
+            const screenOffsetX = this.renderer.resolution.width / 2;
+            const screenOffsetY = this.renderer.resolution.height / 2;
+
+            this.object2D.position.set(screenOffsetX, screenOffsetY);
             this.object2D.scale.set(1, 1);
             this.object2D.rotation = 0;
         }

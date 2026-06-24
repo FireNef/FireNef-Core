@@ -80,8 +80,36 @@ export class Renderer2D extends Component {
         if (Renderer2D.#textureCache.has(path)) {
             return Renderer2D.#textureCache.get(path);
         }
-        const texture = PIXI.Texture.from(path);
+
+        // 1. Create a proxy placeholder texture with a width/height framework
+        const texture = new PIXI.Texture({
+            source: new PIXI.CanvasSource({
+                canvas: document.createElement('canvas')
+            }),
+            dynamic: true // CRITICAL: Tells Pixi v8 this texture's bounds will shift
+        });
+        
         Renderer2D.#textureCache.set(path, texture);
+
+        PIXI.Assets.load(path).then((loadedTexture) => {
+            // Overwrite cache with the completed production texture
+            Renderer2D.#textureCache.set(path, loadedTexture);
+
+            // 2. FIX: Link the source AND explicitly sync the view boundaries
+            texture.source = loadedTexture.source;
+            
+            // Copy dimensions so internal UV calculations don't divide by zero
+            texture.frame.width = loadedTexture.frame.width;
+            texture.frame.height = loadedTexture.frame.height;
+            texture.orig.width = loadedTexture.orig.width;
+            texture.orig.height = loadedTexture.orig.height;
+
+            // 3. FORCE RE-CALCULATION: Tell Pixi v8 to regenerate the UV arrays instantly
+            texture.update(); 
+        }).catch((err) => {
+            console.error(`Failed to load engine texture asset at: ${path}`, err);
+        });
+
         return texture;
     }
 
@@ -262,9 +290,7 @@ export class Renderer2D extends Component {
 
     renderFrame() {
         this.getFps();
-        if (!this.scene || !this.camera || !this.running || !this.renderer) return;
-
-
+        if (!this.scene || !this.running || !this.renderer) return;
 
         const now = performance.now();
         const engine = this.engine;
