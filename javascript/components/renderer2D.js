@@ -21,6 +21,7 @@ export class Renderer2D extends Component {
         const qualityAttribute = new Attribute("Texture & Quality");
         qualityAttribute.addField("Scale Mode", "string", "linear", { options: ["linear", "nearest"] });
         qualityAttribute.addField("Wrap Mode", "string", "clamp", { options: ["clamp", "repeat", "mirror-repeat"] });
+        qualityAttribute.addField("Canvas Rendering", "string", "auto", { options: ["auto", "pixelated"] });
         qualityAttribute.addField("Round Pixels", "boolean", false);
 
         const performanceAttribute = new Attribute("Performance");
@@ -112,17 +113,38 @@ export class Renderer2D extends Component {
         PIXI.TextureSource.defaultOptions.wrapMode = this.getAttr("Texture & Quality", "Wrap Mode");
 
         (async () => {
+
             this.renderer = await PIXI.autoDetectRenderer({
                 canvas: this.canvasElement,
                 preference: this.getAttr("2D Renderer", "Prefer WebGPU") ? "webgpu" : "webgl",
+                texturePreference: {
+                    scaleMode: this.getAttr("Texture & Quality", "Scale Mode"),
+                    wrapMode: this.getAttr("Texture & Quality", "Wrap Mode"),
+                    format: navigator.gpu ? (await navigator.gpu.requestAdapter())?.features : undefined
+                },
                 antialias: this.getAttr("2D Renderer", "Antialias"),
                 backgroundAlpha: this.getAttr("2D Renderer", "Background Alpha"),
                 multisample: this.getAttr("2D Renderer", "Antialias Samples"),
                 clearBeforeRender: this.getAttr("Performance", "Clear Before Render"),
                 batchSize: this.getAttr("Performance", "Batch Size"),
+                roundPixels: this.getAttr("Texture & Quality", "Round Pixels"),
+
+                manageImports: false,
+                skipShaderValidation: true,
+
+                resolution: 1,
+                autoDensity: false,
+
+                width: this.resolution.width,
+                height: this.resolution.height
             });
 
-            this.renderer.roundPixels = this.getAttr("Texture & Quality", "Round Pixels");
+            const canvasRenderMode = this.getAttr("Texture & Quality", "Canvas Rendering");
+            if (canvasRenderMode == "pixelated") {
+                this.canvasElement.style.imageRendering = "pixelated";
+            } else {
+                this.canvasElement.style.imageRendering = "auto"; 
+            }
 
             this.initialized = true;
 
@@ -242,6 +264,8 @@ export class Renderer2D extends Component {
         this.getFps();
         if (!this.scene || !this.camera || !this.running || !this.renderer) return;
 
+
+
         const now = performance.now();
         const engine = this.engine;
 
@@ -256,5 +280,22 @@ export class Renderer2D extends Component {
         }
 
         this.renderer.render({ container: this.scene });
+
+    }
+
+    updateRenderer() {
+        if (!this.renderer) return;
+        const canvasRenderMode = this.getAttr("Texture & Quality", "Canvas Rendering");
+        console.log(this.canvasElement.style.imageRendering)
+        if (canvasRenderMode == "pixelated") {
+            this.canvasElement.style.imageRendering = "pixelated";
+        } else {
+            this.canvasElement.style.imageRendering = "auto";
+        }
+    }
+
+    async setAttributeFieldValue(attribute, field, value, type) {
+        await super.setAttributeFieldValue(attribute, field, value, type);
+        this.updateRenderer();
     }
 }

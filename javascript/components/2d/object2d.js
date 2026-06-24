@@ -153,14 +153,6 @@ export class Object2d extends Component {
         return this.getAttr("Transform", "Rotation");
     }
 
-    get globalRotation() {
-        if (!this.object2D) return 0;
-        this.object2D.updateTransform();
-        const wt = this.object2D.worldTransform;
-        const radians = Math.atan2(wt.b, wt.a);
-        return radians * (180 / Math.PI);
-    }
-
     set position({ x = 0, y = 0 } = {}) {
         this.setAttr("Transform", "Position", { x: x, y: y });
     }
@@ -213,12 +205,6 @@ export class Object2d extends Component {
 
     moveLeftAlongRotationBy(amount = 0) {
         this.moveRightAlongRotationBy(-amount);
-    }
-
-    get globalPosition() {
-        if (!this.object2D) return { x: 0, y: 0 };
-        this.object2D.updateTransform();
-        return this.object2D.toGlobal({ x: 0, y: 0 });
     }
 
     get position() {

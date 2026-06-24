@@ -1,6 +1,7 @@
 import { Object2d } from "./object2d.js";
 import { Attribute } from "../attributes.js";
 import { ComponentController } from "../component.js";
+import { Renderer2D } from "../renderer2D.js";
 
 export class Scene2DComponent extends Object2d {
     constructor(name = "Scene 2d") {
@@ -20,6 +21,8 @@ export class Scene2DComponent extends Object2d {
         this.currentCamera = null;
 
         this.updateDepthLimit = 100000;
+
+        this.renderer = null;
     }
 
     static baseType = "scene2D";
@@ -40,6 +43,7 @@ export class Scene2DComponent extends Object2d {
 
     start() {
         this.updateDepthLimit = this.getFirstParentOfType(ComponentController)?.updateDepthLimit || 100000;
+        this.renderer = this.getFirstParentOfType(Renderer2D);
         this.updateAllProperties();
     }
 
@@ -49,22 +53,26 @@ export class Scene2DComponent extends Object2d {
         this.renderUpdateChildCluster(alpha, this.children);
 
         if (this.currentCamera) {
-
             this.object2D.position.set(0, 0);
             this.object2D.scale.set(1, 1);
             this.object2D.rotation = 0;
 
-            this.currentCamera.object2D.updateTransform();
+            // 1. In v8, use updateLocalTransform to force coordinate updates
+            this.currentCamera.object2D.updateLocalTransform();
 
             const cameraGlobalPos = this.currentCamera.object2D.toGlobal({ x: 0, y: 0 });
 
+            // 2. Safely calculate the rotation from the world matrix in Pixi v8
             const wt = this.currentCamera.object2D.worldTransform;
-            const cameraGlobalRotRadians = Math.atan2(wt.b, wt.a);
+            
+            // Pixi v8 Matrix uses an internal property tracking array, or you can calculate 
+            // the rotation directly from the matrix vector rotation elements:
+            const cameraGlobalRotRadians = Math.atan2(wt.b, wt.a); 
 
             const cameraZoom = this.currentCamera.getAttr("Camera", "Zoom") || 1.0;
 
-            const screenOffsetX = 0;
-            const screenOffsetY = 0;
+            const screenOffsetX = this.renderer.resolution.width / 2;
+            const screenOffsetY = this.renderer.resolution.height / 2;
 
             this.object2D.scale.set(cameraZoom);
             this.object2D.rotation = -cameraGlobalRotRadians;

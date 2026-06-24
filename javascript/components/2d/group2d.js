@@ -1,6 +1,6 @@
 import { Object2d } from "./object2d.js";
 
-export class Group3d extends Object2d {
+export class Group2d extends Object2d {
     constructor(name = "2D Group") {
         super(name);
     }
