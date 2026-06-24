@@ -1,5 +1,5 @@
 import { Object2d } from "./object2d.js";
-import { Attribute } from "../attribute.js";
+import { Attribute } from "../attributes.js";
 import * as PIXI from "pixi";
 
 export class Graphics2D extends Object2d {
