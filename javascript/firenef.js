@@ -67,3 +67,5 @@ export * from "./components/2d/sceneController2d.js";
 export * from "./components/2d/camera2d.js";
 export * from "./components/2d/sprite2d.js";
 export * from "./components/2d/graphics2d.js";
+export * from "./components/2d/text2d.js";
+export * from "./components/2d/bitmapText2d.js";

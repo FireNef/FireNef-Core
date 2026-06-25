@@ -10,29 +10,33 @@ export class Graphics2D extends Object2d {
         shapeAttr.addField("Shape Type", "string", "Rectangle", {
             options: ["Rectangle", "Circle", "Ellipse", "Polygon"],
         });
-        shapeAttr.addField("Dimentions", "vec2", { x: 100, y: 100 });
-        shapeAttr.addField("Polygon Path", "string", "0,0, 100,0, 100,100, 0,100", {
+        shapeAttr.addField("Dimensions", "vec2", { x: 100, y: 100 });
+        shapeAttr.addField("Polygon Path", "string", "0, 100, 100,100, 50,0", {
             description: "Comma-separated X,Y pairs for custom polygons"
         });
-
-        shapeAttr.addField("Fill Color", "color", "#ff0000");
-        shapeAttr.addField("Fill Alpha", "float", 1.0, { min: 0.0, max: 1.0 });
-
-        shapeAttr.addField("Line Width", "float", 1.0, { min: 0.0 });
-        shapeAttr.addField("Line Color", "color", "#000000");
-        shapeAttr.addField("Line Alpha", "float", 1.0, { min: 0.0, max: 1.0 });
-
-
         shapeAttr.addField("Z Index", "number", 0);
         this.attributes.push(shapeAttr);
+
+        const fillAttr = new Attribute("Fill");
+        fillAttr.addField("Fill Color", "color", "#ff0000");
+        fillAttr.addField("Fill Alpha", "float", 1.0, { min: 0.0, max: 1.0 });
+        this.attributes.push(fillAttr);
+
+        const strokeAttr = new Attribute("Stroke");
+        strokeAttr.addField("Stroke Width", "float", 0.0, { min: 0.0 });
+        strokeAttr.addField("Stroke Color", "color", "#000000");
+        strokeAttr.addField("Stroke Alpha", "float", 1.0, { min: 0.0, max: 1.0 });
+        strokeAttr.addField("Stroke Alignment", "float", 0.5, { min: 0.0, max: 1.0 });
+        strokeAttr.addField("Pixel Line", "boolean", false);
+        this.attributes.push(strokeAttr);
 
         this.object2D = new PIXI.Graphics();
         this.object2D.name = name;
     }
 
-    static baseType = "graphics2d"
-    static type = "graphics2d"
-    static icon = ["graphics2d", ...Object2d.icon]
+    static baseType = "graphics2D";
+    static type = "graphics2D";
+    static icon = ["graphics2d", ...Object2d.icon];
 
     updateAllProperties() {
         this.redrawShape();
@@ -49,15 +53,17 @@ export class Graphics2D extends Object2d {
         this.object2D.clear();
 
         const type = this.getAttr("Shape", "Shape Type");
-        const dims = this.getAttr("Shape", "Dimentions");
+        const dims = this.getAttr("Shape", "Dimensions");
         const polyPathStr = this.getAttr("Shape", "Polygon Path");
 
-        const fillColor = this.getAttr("Shape", "Fill Color");
-        const fillAlpha = this.getAttr("Shape", "Fill Alpha");
+        const fillColor = this.getAttr("Fill", "Fill Color");
+        const fillAlpha = this.getAttr("Fill", "Fill Alpha");
 
-        const lineWidth = this.getAttr("Shape", "Line Width");
-        const lineColor = this.getAttr("Shape", "Line Color");
-        const lineAlpha = this.getAttr("Shape", "Line Alpha");
+        const strokeWidth = this.getAttr("Stroke", "Stroke Width");
+        const strokeColor = this.getAttr("Stroke", "Stroke Color");
+        const strokeAlpha = this.getAttr("Stroke", "Stroke Alpha");
+        const strokeAlignment = this.getAttr("Stroke", "Stroke Alignment");
+        const pixelLine = this.getAttr("Stroke", "Pixel Line");
 
         switch (type) {
             case "Circle":
@@ -86,13 +92,14 @@ export class Graphics2D extends Object2d {
             alpha: fillAlpha
         });
 
-        if (lineWidth > 0) {
-            const parsedLineColor = PIXI.Color.shared.setValue(lineColor).toNumber();
+        if (strokeWidth > 0) {
+            const parsedStrokeColor = PIXI.Color.shared.setValue(strokeColor).toNumber();
             this.object2D.stroke({
-                width: lineWidth,
-                color: parsedLineColor,
-                alpha: lineAlpha,
-                alignment: 0.5
+                width: strokeWidth,
+                color: parsedStrokeColor,
+                alpha: strokeAlpha,
+                alignment: strokeAlignment,
+                pixel: pixelLine
             });
         }
 
@@ -112,6 +119,6 @@ export class Graphics2D extends Object2d {
 
     async setAttributeFieldValue(attribute, field, value, type) {
         await super.setAttributeFieldValue(attribute, field, value, type);
-        if (attribute == "Shape") this.redrawShape();
+        if (attribute == "Shape" || attribute == "Fill" || attribute == "Stroke") this.redrawShape();
     }
 }

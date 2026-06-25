@@ -39,8 +39,8 @@ export class Object2d extends Component {
         this.hideInGroup = true;
     }
 
-    static baseType = "object2d"
-    static type = "object2d"
+    static baseType = "object2D"
+    static type = "object2D"
 
     static icon = ["object2d", ...super.icon]
 

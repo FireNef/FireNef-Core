@@ -5,8 +5,8 @@ export class Group2d extends Object2d {
         super(name);
     }
 
-    static baseType = "group2d"
-    static type = "group2d"
+    static baseType = "group2D"
+    static type = "group2D"
 
     static icon = ["group2d", ...super.icon];
 }

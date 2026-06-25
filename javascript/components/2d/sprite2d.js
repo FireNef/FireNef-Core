@@ -24,8 +24,8 @@ export class Sprite2D extends Object2d {
         this.currentTexturePath = null;
     }
 
-    static baseType = "sprite2d"
-    static type = "sprite2d"
+    static baseType = "sprite2D"
+    static type = "sprite2D"
     static icon = ["sprite2d", ...Object2d.icon]
 
     updateAllProperties() {
