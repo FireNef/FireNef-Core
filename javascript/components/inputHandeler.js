@@ -76,47 +76,52 @@ export class InputHandeler extends Component {
 
         this.viewport.elementChangeUpdateList.push((w, h, l, t) => this.updateOffsets(w, h, l, t));
 
-        document.addEventListener("mousedown", (e) => this.updateMouseButtons(e));
-        document.addEventListener("mouseup", (e) => this.updateMouseButtons(e));
-        document.addEventListener("mousemove", (e) => this.updateMousePosition(e));
+        if (this.getAttr("Input Handeler", "Mouse Enable")) {
+            document.addEventListener("mousedown", (e) => this.updateMouseButtons(e));
+            document.addEventListener("mouseup", (e) => this.updateMouseButtons(e));
+            document.addEventListener("mousemove", (e) => this.updateMousePosition(e));
 
-        document.addEventListener("wheel", (e) => {
-            e.preventDefault();
-            this.scrollTriggerList.forEach(callback => callback(e.deltaY));
-        }, { passive: false });
+            document.addEventListener("wheel", (e) => {
+                e.preventDefault();
+                this.scrollTriggerList.forEach(callback => callback(e.deltaY));
+            }, { passive: false });
 
-        document.addEventListener("keydown", (e) => {
-            const key = e.key.toLowerCase();
-            
-            const consoleEnabled = this.getAttr("Input Handeler", "Console Enable");
 
-            const isF12 = key === "f12";
-            const isDevToolsShortcut = (e.ctrlKey || e.metaKey) && e.shiftKey && key === "i";
-            const isMacElementsShortcut = e.metaKey && e.altKey && key === "i";
+            document.addEventListener("click", (e) => e.preventDefault());
+            document.addEventListener("contextmenu", (e) => e.preventDefault());
+        }
 
-            if (consoleEnabled && (isF12 || isDevToolsShortcut || isMacElementsShortcut)) {
+        if (this.getAttr("Input Handeler", "Keyboard Enable")) {
+            document.addEventListener("keydown", (e) => {
+                const key = e.key.toLowerCase();
+                
+                const consoleEnabled = this.getAttr("Input Handeler", "Console Enable");
+
+                const isF12 = key === "f12";
+                const isDevToolsShortcut = (e.ctrlKey || e.metaKey) && e.shiftKey && key === "i";
+                const isMacElementsShortcut = e.metaKey && e.altKey && key === "i";
+
+                if (consoleEnabled && (isF12 || isDevToolsShortcut || isMacElementsShortcut)) {
+                    this.keysDown.set(key, true);
+                    if (key === " ") {
+                        this.keysDown.set("space", true);
+                    }
+                    return; 
+                }
+
+                e.preventDefault();
                 this.keysDown.set(key, true);
                 if (key === " ") {
                     this.keysDown.set("space", true);
                 }
-                return; 
-            }
-
-            e.preventDefault();
-            this.keysDown.set(key, true);
-            if (key === " ") {
-                this.keysDown.set("space", true);
-            }
-        });
-        document.addEventListener("keyup", (e) => {
-            this.keysDown.delete(e.key.toLowerCase())
-            if (e.key === " ") {
-                this.keysDown.delete("space");
-            }
-        });
-
-        document.addEventListener("click", (e) => e.preventDefault());
-        document.addEventListener("contextmenu", (e) => e.preventDefault());
+            });
+            document.addEventListener("keyup", (e) => {
+                this.keysDown.delete(e.key.toLowerCase())
+                if (e.key === " ") {
+                    this.keysDown.delete("space");
+                }
+            });
+        }
 
         window.addEventListener('blur', this.handleUnfocus);
         window.addEventListener('focus', this.handleFocus);
