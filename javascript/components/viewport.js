@@ -73,7 +73,10 @@ export class Viewport extends Component {
             this.positionElementsFreeForm(this.viewportElement);
         }
 
-        this.elementChangeUpdateList.forEach(callback => callback(this.viewportElement.width, this.viewportElement.height, this.viewportElement.left, this.viewportElement.top));
+        if (this.viewportElement.firstElementChild) {
+            const rect = this.viewportElement.firstElementChild.getBoundingClientRect();
+            this.elementChangeUpdateList.forEach(callback => callback(rect.width, rect.height, rect.left, rect.top));
+        }
 
         if (this.oldResolution.width != this.actualResolution.width || this.oldResolution.height != this.actualResolution.height) {
             this.resolutionUpdateList.forEach(callback => callback(this.actualResolution.width, this.actualResolution.height));
