@@ -20,6 +20,7 @@ export class Viewport extends Component {
         this.startAmount = 0;
 
         this.resolutionUpdateList = [];
+        this.elementChangeUpdateList = [];
 
         this.viewportElement = document.createElement('div');
         this.viewportElement.id = "viewport";
@@ -71,6 +72,8 @@ export class Viewport extends Component {
         } else {
             this.positionElementsFreeForm(this.viewportElement);
         }
+
+        this.elementChangeUpdateList.forEach(callback => callback(this.viewportElement.width, this.viewportElement.height, this.viewportElement.left, this.viewportElement.top));
 
         if (this.oldResolution.width != this.actualResolution.width || this.oldResolution.height != this.actualResolution.height) {
             this.resolutionUpdateList.forEach(callback => callback(this.actualResolution.width, this.actualResolution.height));
