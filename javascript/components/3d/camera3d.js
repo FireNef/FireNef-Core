@@ -57,7 +57,9 @@ export class PerspectiveCameraComponent extends Object3d {
                 this.sceneComponent.currentCamera = null;
             } else if (usedCamera) {
                 if (this.sceneComponent.currentCamera !== this) {
-                    this.sceneComponent.currentCamera.setAttr("Camera", "Current Camera", false);
+                    if (this.sceneComponent?.currentCamera) {
+                        this.sceneComponent.currentCamera.setAttr("Camera", "Current Camera", false);
+                    }
                 }
                 this.sceneComponent.currentCamera = this;
             }

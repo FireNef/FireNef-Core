@@ -40,7 +40,13 @@ export class UiElement extends Component {
     }
 
     updateElement() {
-        const slots = Array.from(this.element.querySelectorAll("slot"));
+        const slots = Array.from(this.element.querySelectorAll("slot"))
+            .filter(slot => /^c\d+$/i.test(slot.name))
+            .sort((a, b) => {
+                const numA = parseInt(a.name.slice(1), 10);
+                const numB = parseInt(b.name.slice(1), 10);
+                return numA - numB;
+            });
 
         const uiChildren = (this.children ?? []).filter(child => 
             child instanceof UiElement && child.host

@@ -14,9 +14,9 @@ export class Camera2DComponent extends Object2d {
         this.sceneComponent = null;
     }
     
-    static baseType = "camera2D"
-    static type = "camera2D"
-    static group = "General 2D"
+    static baseType = "camera2D";
+    static type = "camera2D";
+    static group = "General 2D";
 
     start() {
         super.start();
