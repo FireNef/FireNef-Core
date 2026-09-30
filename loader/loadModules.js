@@ -12,14 +12,14 @@ export default async function loadModules(engine, config) {
 
     if (!mainModule || typeof mainModule !== "object") throw console.error("Main Module missing or incorrect.");
 
-    const components = await loadFullModule(mainModule.updater ?? [], sourcePath);
+    const components = await loadFullModule(mainModule, sourcePath);
     components.forEach(component => component.parent = engine );
     engine.updateList.push(...components);
 }
 
-async function loadFullModule(modules, sourcePath) {
-    const components = await loadModuleSkeleton(modules, sourcePath);
-    await initializeComponents(components, modules, sourcePath);
+async function loadFullModule(module, sourcePath) {
+    const components = await loadModuleSkeleton([module], sourcePath);
+    await initializeComponents(components, [module], sourcePath);
     return components;
 }
 
@@ -51,7 +51,7 @@ async function initializeComponents(components, modules, sourcePath) {
                     if (!fieldValue.type) continue;
                     const [ attributeName, fieldName ] = component.getAttributeName(attribute, field);
                     if (fieldValue.type === "component" || fieldValue.type === "module") {
-                        const newComponent = await loadFullModule([fieldValue], sourcePath);
+                        const newComponent = await loadFullModule(fieldValue, sourcePath);
                         await component.setAttributeFieldValue(attributeName, fieldName, newComponent[0], fieldValue.setType);
                     } else if (fieldValue.type === "variable") {
                         await component.setAttributeFieldValue(attributeName, fieldName, getVariableValue(fieldValue.value), fieldValue.setType ?? fieldValue.type);
